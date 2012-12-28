@@ -1,4 +1,4 @@
-(ns twillio.core-test
+(ns twilio.core-test
   (:use clojure.test
         twillio.core))
 
