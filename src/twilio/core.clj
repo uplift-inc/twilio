@@ -1,6 +1,11 @@
 (ns twilio.core)
 
-(defn -main
-  "I don't do a whole lot."
-  [& args]
-  (println "Hello, World!"))
+(def ^:dynamic *base* "https://api.twilio.com/2010-04-01")
+(def ^:dynamic *sid* "")
+(def ^:dynamic *token* "")
+
+(defmacro with-auth [account_sid auth_token & body]
+  `(binding [*sid* ~account_sid
+             *token* ~auth_token]
+    (do ~@body)))
+        
