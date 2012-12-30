@@ -7,7 +7,8 @@
 (def ^:dynamic *sid* "")
 (def ^:dynamic *token* "")
 
-(defmacro with-auth [account_sid auth_token & body]
+(defmacro with-auth 
+  [account_sid auth_token & body]
   `(binding [*sid* ~account_sid
              *token* ~auth_token]
     (do ~@body)))
@@ -21,7 +22,10 @@
     *base*
     *sid*))
 
-(defn make-request [url & params]
+;; TODO abstract this
+(defn make-request 
+  "Make a generic HTTP request"
+  [url & params]
   (try
     (client/post url
       {:accept :json
