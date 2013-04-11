@@ -14,25 +14,16 @@ There is a fully complete Java API out there so if you're looking to use Twilio 
 First require the Twilio sms ns
 
 ```
-(:require [twilio.sms :as twilio]))
+(:require [twilio.core :as twilio]))
 ```
 
 Send an SMS message
 
 ```clojure
 (twilio/with-auth "your-sid" "your-auth-token"
-  (twilio/send {:From "+442033222504" 
-                :To "+447846012894" 
+  (twilio/send {:From "+442033222504"
+                :To "+447846012894"
                 :Body "Hello world"}))
-
-```
-
-Get a single SMS message by SID
-
-```clojure
-
-(twilio/with-auth "your-sid" "your-auth-token"
-  (twilio/get-sms 1234))
 
 ```
 

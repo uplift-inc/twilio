@@ -1,4 +1,5 @@
 (ns twilio.core
+  (refer-clojure :exclude [send])
   (import [java.net URLEncoder])
   (:require [clj-http.client :as client]
             [cheshire.core :as json]))
@@ -7,14 +8,13 @@
 (def ^:dynamic *sid* "")
 (def ^:dynamic *token* "")
 
-(defmacro with-auth 
+(defmacro with-auth
   [account_sid auth_token & body]
   `(binding [*sid* ~account_sid
              *token* ~auth_token]
     (do ~@body)))
 
-(defn encode-url [url]
-  (URLEncoder/encode url))
+(defn encode-url [url] (URLEncoder/encode url))
 
 (defn make-request-url []
   (format
@@ -22,15 +22,17 @@
     *base*
     *sid*))
 
-;; TODO abstract this
-(defn make-request 
+(defn request
   "Make a generic HTTP request"
-  [url & params]
+  [method url & params]
   (try
-    (client/post url
+    (let [f (condp = method
+              :post client/post
+              :else client/get)]
+    (f url
       {:accept :json
        :form-params (first params)
-       :basic-auth [*sid* *token*]})
+       :basic-auth [*sid* *token*]}))
   (catch Exception e
      (let [exception-info (.getData e)]
      (select-keys
@@ -38,4 +40,21 @@
          (json/parse-string
              (get-in exception-info [:object :body]))))
              (vector :status :message :code))))))
-  
+
+(def msg {:From "+442033222504"
+          :To "+447846012894"
+          :Body "Hello world"})
+
+(defn get-message [sid])
+
+(defn send
+  "Send an SMS message
+    msg is a map with the following keys
+    - From
+    - To
+    - Body
+  "
+  [msg]
+  (let [url (make-request-url)]
+    (request :post url msg)))
+

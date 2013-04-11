@@ -1,6 +1,6 @@
 (ns twilio.core-test
   (:use clojure.test
-        twillio.core))
+        twilio.core))
 
 (deftest a-test
   (testing "FIXME, I fail."
