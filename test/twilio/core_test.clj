@@ -2,6 +2,7 @@
   (:use clojure.test
         twilio.core))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest uppercase-keys
+  (testing "Should convert keys to uppercase format"
+    (let [actual (as-twilio-map {:foo 1 :bar 2 :baz 3})]
+      (is (= {:Foo 1 :Bar 2 :Baz 3} actual)))))
