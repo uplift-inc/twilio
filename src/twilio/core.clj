@@ -76,12 +76,7 @@
 ;; *************************************************
 
 (defn send
-  "Send an SMS message
-    msg is a map with the following keys
-    - From
-    - To
-    - Body
-  "
+  "Send an SMS message which is a map in the form {:From x :To x :Body x}"
   [msg]
   (let [url (make-request-url "Messages")]
     (request :post url msg)))
