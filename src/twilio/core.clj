@@ -6,10 +6,12 @@
 
 (def *base* "https://api.twilio.com/2010-04-01")
 
-(def ^:dynamic *sid* 
-  "")
-(def ^:dynamic *token* 
-  "")
+;; Authentication info
+
+(def ^:dynamic *sid*   "")
+(def ^:dynamic *token* "")
+
+;; Helper macro
 
 (defmacro with-auth
   [account_sid auth_token & body]
@@ -25,6 +27,8 @@
     *base*
     *sid*
     endpoint))
+
+;; HTTP requests
 
 (defn request
   "Make a simple POST request to the API"
@@ -42,6 +46,8 @@
       {:error e}))))
 
 (deftype SMS [from to body])
+
+;; Utils
 
 (def twilio-format-key
   (comp keyword str/capitalize name))
