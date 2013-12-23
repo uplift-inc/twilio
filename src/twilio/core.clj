@@ -11,6 +11,18 @@
 (def ^:dynamic *sid*   "")
 (def ^:dynamic *token* "")
 
+(defn env [var] (System/getenv var))
+
+(defn load-auth-from-env []
+  (let [sid (env "TWILIO_SID")
+        token (env "TWILIO_AUTH_TOKEN")]
+   {:sid sid :token token}))
+
+(defn load-auth-from-config []
+  (binding [*read-eval* false]
+    (with-open [r (clojure.java.io/reader "config.clj")]
+      (read (java.io.PushbackReader. r)))))
+
 ;; Helper macro
 
 (defmacro with-auth
@@ -19,7 +31,7 @@
              *token* ~auth_token]
     (do ~@body)))
 
-(defn encode-url [url] 
+(defn encode-url [url]
   (URLEncoder/encode url))
 
 (defn make-request-url [endpoint]
@@ -55,22 +67,28 @@
 (defn as-twilio-map [m]
   "Twilio defines ugly uppercase keys for the api i.e :from becomes :From
    so this helper transforms clojure keys without making my eyes bleed"
-  (reduce 
+  (reduce
     (fn [acc [k v]]
       (conj acc {(twilio-format-key k) v})) {} m))
-        
-(defn sms 
+
+(defn sms
   "Create an SMS message"
   [from to body]
   (as-twilio-map
     {:body body
      :to to
      :from from}))
- 
+
 (def msg
   (sms "+442033222504"
        "+447846012894"
        "OH HAI!"))
+
+(def picture-msg
+  {:From "+442033222504"
+   :To "+447846012894"
+   :Body "Hi"
+   :MediaUrl "http://cdn.cutestpaw.com/wp-content/uploads/2011/12/Christmas-Balbinka-l.jpg"})
 
 ;; Send an SMS message via Twilio
 ;; *************************************************
@@ -83,9 +101,8 @@
 
 ;; *************************************************
 
-(defn get-messages 
+(defn get-messages
   "Fetch all messages sent from your account"
   []
   (if-let [response (request :get (make-request-url "Messages"))]
     (get-in response [:body :sms_messages])))
-
