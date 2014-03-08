@@ -1,6 +1,6 @@
 (ns twilio.core
-  (refer-clojure :exclude [send])
   (import [java.net URLEncoder])
+  (:refer-clojure :exclude [send])
   (:require [clj-http.client :as client]
             [clojure.string :as str]))
 
