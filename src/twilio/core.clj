@@ -4,7 +4,7 @@
   (:require [clj-http.client :as client]
             [clojure.string :as str]))
 
-(def *base* "https://api.twilio.com/2010-04-01")
+(def base "https://api.twilio.com/2010-04-01")
 
 ;; Authentication info
 
@@ -36,7 +36,7 @@
 
 (defn make-request-url [endpoint]
   (format "%s/Accounts/%s/SMS/%s.json"
-    *base*
+    base
     *sid*
     endpoint))
 
