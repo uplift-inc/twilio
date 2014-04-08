@@ -50,7 +50,6 @@
       (http/request
         {:method method
          :url url
-         :as :json
          :form-params request-params
          :basic-auth [*sid* *token*]})
     (catch Exception e
@@ -105,3 +104,34 @@
   []
   (if-let [response (request :get (make-request-url "Messages"))]
     (get-in response [:body :sms_messages])))
+
+
+(defn verify-phone
+  "Verify a phone number for making calls"
+  [num]
+  (assert ((complement every?) str/blank? [*sid* *token*]))
+  (let [url (str base "/Accounts/" *sid* "/OutgoingCallerIds.json")
+        params {:PhoneNumber num}]
+    (try
+      (http/request
+       {:method :post
+        :url url
+        :form-params params
+        :basic-auth [*sid* *token*]})
+      (catch Exception e
+        {:error e}))))
+
+(defn make-call
+  "Make a phone call"
+  [params]
+  (assert ((complement every?) str/blank? [*sid* *token*]))
+  (let [request-params (into {} params)
+        url (str base "/Accounts/" *sid* "/Calls.json")]
+  (try
+      (http/request
+        {:method :post
+         :url url
+         :form-params request-params
+         :basic-auth [*sid* *token*]})
+    (catch Exception e
+      {:error e}))))
