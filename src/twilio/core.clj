@@ -1,7 +1,6 @@
 (ns twilio.core
   (import [java.net URLEncoder])
-  (:refer-clojure :exclude [send])
-  (:require [clj-http.client :as client]
+  (:require [org.httpkit.client :as http]
             [clojure.string :as str]))
 
 (def base "https://api.twilio.com/2010-04-01")
@@ -48,10 +47,9 @@
   (assert ((complement every?) str/blank? [*sid* *token*]))
   (let [request-params (into {} params)]
     (try
-      (client/request
+      (http/request
         {:method method
          :url url
-         :as :json
          :form-params request-params
          :basic-auth [*sid* *token*]})
     (catch Exception e
@@ -93,7 +91,7 @@
 ;; Send an SMS message via Twilio
 ;; *************************************************
 
-(defn send
+(defn send-sms
   "Send an SMS message which is a map in the form {:From x :To x :Body x}"
   [msg]
   (let [url (make-request-url "Messages")]
@@ -106,3 +104,34 @@
   []
   (if-let [response (request :get (make-request-url "Messages"))]
     (get-in response [:body :sms_messages])))
+
+
+(defn verify-phone
+  "Verify a phone number for making calls"
+  [num]
+  (assert ((complement every?) str/blank? [*sid* *token*]))
+  (let [url (str base "/Accounts/" *sid* "/OutgoingCallerIds.json")
+        params {:PhoneNumber num}]
+    (try
+      (http/request
+       {:method :post
+        :url url
+        :form-params params
+        :basic-auth [*sid* *token*]})
+      (catch Exception e
+        {:error e}))))
+
+(defn make-call
+  "Make a phone call"
+  [params]
+  (assert ((complement every?) str/blank? [*sid* *token*]))
+  (let [request-params (into {} params)
+        url (str base "/Accounts/" *sid* "/Calls.json")]
+  (try
+      (http/request
+        {:method :post
+         :url url
+         :form-params request-params
+         :basic-auth [*sid* *token*]})
+    (catch Exception e
+      {:error e}))))
