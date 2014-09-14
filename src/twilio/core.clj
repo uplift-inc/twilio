@@ -94,7 +94,6 @@
   (if-let [response (request :get (make-request-url "Messages"))]
     (get-in response [:body :sms_messages])))
 
-
 (defn verify-phone
   "Verify a phone number for making calls"
   [num]
