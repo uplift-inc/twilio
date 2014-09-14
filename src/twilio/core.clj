@@ -77,17 +77,6 @@
      :to to
      :from from}))
 
-(def msg
-  (sms "+442033222504"
-       "+447846012894"
-       "OH HAI!"))
-
-(def picture-msg
-  {:From "+442033222504"
-   :To "+447846012894"
-   :Body "Hi"
-   :MediaUrl "http://cdn.cutestpaw.com/wp-content/uploads/2011/12/Christmas-Balbinka-l.jpg"})
-
 ;; Send an SMS message via Twilio
 ;; *************************************************
 
