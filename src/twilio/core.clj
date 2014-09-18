@@ -82,9 +82,9 @@
 
 (defn send-sms
   "Send an SMS message which is a map in the form {:From x :To x :Body x}"
-  [msg]
+  [params]
   (let [url (make-request-url "Messages")]
-    (request :post url msg)))
+    (request :post url params)))
 
 ;; *************************************************
 
@@ -106,6 +106,5 @@
   "Make a phone call"
   [params]
   (assert ((complement every?) str/blank? [*sid* *token*]))
-  (let [request-params (into {} params)
-        url (str base "/Accounts/" *sid* "/Calls.json")]
+  (let [url (str base "/Accounts/" *sid* "/Calls.json")]
     (request :post url params)))
