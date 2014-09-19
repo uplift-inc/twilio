@@ -1,4 +1,4 @@
-(defproject twilio-api "0.1.1"
+(defproject twilio-api "1.0.0"
   :description "Clojure wrapper for Twillio"
   :url "http://owainlewis.com"
   :license {:name "Eclipse Public License"
