@@ -27,7 +27,7 @@ Send an SMS message
 
 ```clojure
 (twilio/with-auth "your-sid" "your-auth-token"
-  (twilio/send
+  (twilio/send-sms
     {:From "+442033222504"
      :To "+447846012894"
      :Body "Hello world"}))
@@ -44,7 +44,7 @@ Since uppercase key names hurt my eyes, there's a helper function to make things
 ;; Send the message
 
 (twilio/with-auth "your-sid" "your-auth-token"
-  (twilio/send my-sms-message))
+  (twilio/send-sms my-sms-message))
 
 ```
 
