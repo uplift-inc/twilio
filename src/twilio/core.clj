@@ -1,6 +1,6 @@
 (ns twilio.core
   (import [java.net URLEncoder])
-  (:require [org.httpkit.client :as http]
+  (:require [clj-http.client :as http]
             [clojure.string :as str]))
 
 (def base "https://api.twilio.com/2010-04-01")
@@ -51,7 +51,8 @@
         {:method method
          :url url
          :form-params request-params
-         :basic-auth [*sid* *token*]})
+         :basic-auth [*sid* *token*]
+         :conn-timeout 3000}) ; Timeout the request in 3 seconds
     (catch Exception e
       {:error e}))))
 
