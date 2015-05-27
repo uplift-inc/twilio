@@ -46,15 +46,18 @@
   [method url & params]
   (assert ((complement every?) str/blank? [*sid* *token*]))
   (let [request-params (into {} params)]
+
     (try
       (http/request
         {:method method
          :url url
          :form-params request-params
          :basic-auth [*sid* *token*]
+         :socket-timeout 3000
          :conn-timeout 3000}) ; Timeout the request in 3 seconds
     (catch Exception e
       {:error e}))))
+
 
 (deftype SMS [from to body])
 
