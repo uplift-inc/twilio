@@ -1,4 +1,4 @@
-1(defproject org.clojars.uplift/twilio-sms "1.0.0"
+1(defproject uplift/twilio-sms "1.0.0"
   :description "Clojure wrapper for Twillio-SMS"
   :url "https://github.com/uplift-inc/twilio"
   :license {:name "Eclipse Public License"
